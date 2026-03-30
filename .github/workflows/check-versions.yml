@@ -2,7 +2,7 @@ name: Check QB Versions
 
 on:
   schedule:
-    - cron: '0 6 * * 1'  # Every Monday at 6am UTC
+    - cron: '0 0,12 * * *'  # Twice daily: midnight and noon UTC
   workflow_dispatch:       # Allow manual trigger
 
 jobs:
