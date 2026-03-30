@@ -1,1 +1,41 @@
-{ }
+{
+  "QuickBooks Pro 2024": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Pro 2023": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Pro 2022": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Premier 2024": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Premier 2023": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Premier 2022": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Accountant 2024": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Accountant 2023": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Accountant 2022": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Enterprise 24": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Enterprise Acct 24": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Enterprise 23": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  },
+  "QuickBooks Enterprise 22": {
+    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+  }
+}
