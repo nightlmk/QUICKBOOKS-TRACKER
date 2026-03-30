@@ -26,8 +26,11 @@ versions = [
 results = []
 
 
-def get_msi_properties(msi_path):
-    """Return (ProductName, ProductVersion) from an MSI file, or (None, None) on failure."""
+def read_msi_version(msi_path):
+    """
+    Return (ProductName, ProductVersion) from quickbooks.msi via msiinfo, or
+    (None, None) on failure.
+    """
     result = subprocess.run(
         ["msiinfo", "export", msi_path, "Property"],
         capture_output=True, text=True
@@ -44,77 +47,34 @@ def get_msi_properties(msi_path):
     return prod_name, prod_ver
 
 
-def find_quickbooks_version(search_dir, _depth=0):
+def find_quickbooks_msi(search_dir):
     """
-    Find the actual QuickBooks ProductVersion from an extracted installer directory.
+    Recursively search search_dir for every file named quickbooks.msi (any case).
 
-    QuickBooks .exe installers contain a small bootstrapper MSI (consistently
-    versioned 2.2.0.0) plus the real application payload, which may be a
-    differently-named MSI or packed inside .cab archives.  This function:
-      1. Collects every .msi under search_dir, sorted largest-first.
-      2. Prefers an MSI whose ProductName contains "QuickBooks" over any other.
-      3. Falls back to the first MSI whose version differs from the known
-         bootstrapper version (2.2.0.0).
-      4. If still nothing useful, extracts each .cab file found and recurses
-         (up to depth 2) to handle nested payloads.
+    Extracting a QB .exe produces at least two copies of quickbooks.msi:
+      - A small top-level bootstrapper (version 2.2.0.0)
+      - The real application MSI nested in a sub-folder (e.g. QBooks/quickbooks.msi)
+        which carries the true product version and is always much larger.
+
+    Returns the path of the largest quickbooks.msi found, which is the real
+    application installer.  Returns None if no such file exists.
     """
-    if _depth > 2:
-        return None
-
-    msi_files = []
-    cab_files = []
+    candidates = []
     for root, dirs, files in os.walk(search_dir):
         for f in files:
-            full_path = os.path.join(root, f)
-            lower_f = f.lower()
-            if lower_f.endswith(".msi"):
-                msi_files.append(full_path)
-            elif lower_f.endswith(".cab"):
-                cab_files.append(full_path)
+            if f.lower() == "quickbooks.msi":
+                full_path = os.path.join(root, f)
+                candidates.append(full_path)
 
-    # Largest MSI first – the application MSI is typically much bigger than the
-    # bootstrapper, so this ordering maximizes the chance of an early match.
-    msi_files.sort(key=os.path.getsize, reverse=True)
+    if not candidates:
+        return None
 
-    fallback_version = None
-
-    for msi_path in msi_files:
-        prod_name, prod_ver = get_msi_properties(msi_path)
-        if not prod_ver:
-            continue
-        if prod_name and "quickbooks" in prod_name.lower():
-            # Found the real application MSI – use it regardless of version value.
-            print(f"    [msi] {os.path.basename(msi_path)}: {prod_name} {prod_ver}")
-            return prod_ver
-        if prod_ver != "2.2.0.0" and fallback_version is None:
-            fallback_version = prod_ver
-
-    if fallback_version:
-        return fallback_version
-
-    # No suitable MSI found in this pass – dig into any .cab archives.
-    for cab_path in cab_files:
-        nested_dir = tempfile.mkdtemp()
-        try:
-            r = subprocess.run(
-                ["7z", "x", cab_path, "-aoa", f"-o{nested_dir}"],
-                capture_output=True
-            )
-            if r.returncode == 0:
-                ver = find_quickbooks_version(nested_dir, _depth + 1)
-                if ver:
-                    return ver
-        finally:
-            shutil.rmtree(nested_dir, ignore_errors=True)
-
-    # Absolute last resort: return the version from the first MSI that has one
-    # (likely the bootstrapper), so we at least report something rather than "unknown".
-    for msi_path in msi_files:
-        _, prod_ver = get_msi_properties(msi_path)
-        if prod_ver:
-            return prod_ver
-
-    return None
+    # The real application MSI is much larger than the bootstrapper, so pick
+    # the largest one.
+    candidates.sort(key=os.path.getsize, reverse=True)
+    for path in candidates:
+        print(f"    [found] {path} ({os.path.getsize(path):,} bytes)")
+    return candidates[0]
 
 
 for name, url in versions:
@@ -123,22 +83,30 @@ for name, url in versions:
     os.close(tmp_fd)
     tmp_dir = tempfile.mkdtemp()
     try:
-        # Download
+        # 1. Download the installer
         urllib.request.urlretrieve(url, tmp_exe)
 
-        # Get Last-Modified and Content-Length from headers
+        # 2. Get Last-Modified and Content-Length from headers
         req = urllib.request.Request(url, method="HEAD")
         with urllib.request.urlopen(req) as r:
             last_mod = r.headers.get("Last-Modified", "")
             size_mb = round(int(r.headers.get("Content-Length", 0)) / (1024 * 1024))
 
-        # Extract exe
+        # 3. Extract the .exe with 7-Zip
         extract = subprocess.run(["7z", "x", tmp_exe, "-aoa", f"-o{tmp_dir}"], capture_output=True)
         if extract.returncode != 0:
             raise RuntimeError(f"7z extraction failed: {extract.stderr.decode(errors='replace')}")
 
-        # Find the real QuickBooks version from the extracted content
-        version = find_quickbooks_version(tmp_dir)
+        # 4. Find quickbooks.msi (pick the largest one – that is the real app installer)
+        msi_path = find_quickbooks_msi(tmp_dir)
+        if not msi_path:
+            raise RuntimeError("quickbooks.msi not found in extracted installer")
+
+        # 5. Read ProductName and ProductVersion from the MSI
+        prod_name, version = read_msi_version(msi_path)
+        if not version:
+            raise RuntimeError(f"ProductVersion not found in {msi_path}")
+        print(f"    ProductName: {prod_name}")
 
         # Parse date
         try:
@@ -149,7 +117,7 @@ for name, url in versions:
 
         results.append({
             "name": name,
-            "version": version or "unknown",
+            "version": version,
             "last_modified": date_str,
             "size_mb": size_mb,
         })
