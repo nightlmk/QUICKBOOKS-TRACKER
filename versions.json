@@ -1,41 +1,54 @@
 {
   "QuickBooks Pro 2024": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-02-19",
+    "size_mb": 1098
   },
   "QuickBooks Pro 2023": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-03-09",
+    "size_mb": 1068
   },
   "QuickBooks Pro 2022": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2025-03-05",
+    "size_mb": 912
   },
   "QuickBooks Premier 2024": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-02-19",
+    "size_mb": 1098
   },
   "QuickBooks Premier 2023": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-03-09",
+    "size_mb": 1068
   },
   "QuickBooks Premier 2022": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2025-03-05",
+    "size_mb": 912
   },
   "QuickBooks Accountant 2024": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-02-19",
+    "size_mb": 1098
   },
   "QuickBooks Accountant 2023": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-03-09",
+    "size_mb": 1068
   },
   "QuickBooks Accountant 2022": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2025-03-05",
+    "size_mb": 912
   },
   "QuickBooks Enterprise 24": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-02-19",
+    "size_mb": 1089
   },
   "QuickBooks Enterprise Acct 24": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-02-19",
+    "size_mb": 1089
   },
   "QuickBooks Enterprise 23": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2026-03-09",
+    "size_mb": 1058
   },
   "QuickBooks Enterprise 22": {
-    "error": "<urlopen error [Errno -5] No address associated with hostname>"
+    "last_modified": "2025-03-05",
+    "size_mb": 902
   }
 }
