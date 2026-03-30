@@ -25,6 +25,98 @@ versions = [
 
 results = []
 
+
+def get_msi_properties(msi_path):
+    """Return (ProductName, ProductVersion) from an MSI file, or (None, None) on failure."""
+    result = subprocess.run(
+        ["msiinfo", "export", msi_path, "Property"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        return None, None
+    prod_name = None
+    prod_ver = None
+    for line in result.stdout.splitlines():
+        if line.startswith("ProductName\t"):
+            prod_name = line.split("\t", 1)[1].strip()
+        elif line.startswith("ProductVersion\t"):
+            prod_ver = line.split("\t", 1)[1].strip()
+    return prod_name, prod_ver
+
+
+def find_quickbooks_version(search_dir, _depth=0):
+    """
+    Find the actual QuickBooks ProductVersion from an extracted installer directory.
+
+    QuickBooks .exe installers contain a small bootstrapper MSI (consistently
+    versioned 2.2.0.0) plus the real application payload, which may be a
+    differently-named MSI or packed inside .cab archives.  This function:
+      1. Collects every .msi under search_dir, sorted largest-first.
+      2. Prefers an MSI whose ProductName contains "QuickBooks" over any other.
+      3. Falls back to the first MSI whose version differs from the known
+         bootstrapper version (2.2.0.0).
+      4. If still nothing useful, extracts each .cab file found and recurses
+         (up to depth 2) to handle nested payloads.
+    """
+    if _depth > 2:
+        return None
+
+    msi_files = []
+    cab_files = []
+    for root, dirs, files in os.walk(search_dir):
+        for f in files:
+            full_path = os.path.join(root, f)
+            lower_f = f.lower()
+            if lower_f.endswith(".msi"):
+                msi_files.append(full_path)
+            elif lower_f.endswith(".cab"):
+                cab_files.append(full_path)
+
+    # Largest MSI first – the application MSI is typically much bigger than the
+    # bootstrapper, so this ordering maximizes the chance of an early match.
+    msi_files.sort(key=os.path.getsize, reverse=True)
+
+    fallback_version = None
+
+    for msi_path in msi_files:
+        prod_name, prod_ver = get_msi_properties(msi_path)
+        if not prod_ver:
+            continue
+        if prod_name and "quickbooks" in prod_name.lower():
+            # Found the real application MSI – use it regardless of version value.
+            print(f"    [msi] {os.path.basename(msi_path)}: {prod_name} {prod_ver}")
+            return prod_ver
+        if prod_ver != "2.2.0.0" and fallback_version is None:
+            fallback_version = prod_ver
+
+    if fallback_version:
+        return fallback_version
+
+    # No suitable MSI found in this pass – dig into any .cab archives.
+    for cab_path in cab_files:
+        nested_dir = tempfile.mkdtemp()
+        try:
+            r = subprocess.run(
+                ["7z", "x", cab_path, "-aoa", f"-o{nested_dir}"],
+                capture_output=True
+            )
+            if r.returncode == 0:
+                ver = find_quickbooks_version(nested_dir, _depth + 1)
+                if ver:
+                    return ver
+        finally:
+            shutil.rmtree(nested_dir, ignore_errors=True)
+
+    # Absolute last resort: return the version from the first MSI that has one
+    # (likely the bootstrapper), so we at least report something rather than "unknown".
+    for msi_path in msi_files:
+        _, prod_ver = get_msi_properties(msi_path)
+        if prod_ver:
+            return prod_ver
+
+    return None
+
+
 for name, url in versions:
     print(f"Processing {name}...")
     tmp_fd, tmp_exe = tempfile.mkstemp(suffix=".exe")
@@ -45,25 +137,8 @@ for name, url in versions:
         if extract.returncode != 0:
             raise RuntimeError(f"7z extraction failed: {extract.stderr.decode(errors='replace')}")
 
-        # Find quickbooks.msi
-        msi_path = None
-        for root, dirs, files in os.walk(tmp_dir):
-            for f in files:
-                if f.lower() == "quickbooks.msi":
-                    msi_path = os.path.join(root, f)
-                    break
-
-        version = None
-        if msi_path:
-            msi_result = subprocess.run(
-                ["msiinfo", "export", msi_path, "Property"],
-                capture_output=True, text=True
-            )
-            if msi_result.returncode == 0:
-                for line in msi_result.stdout.splitlines():
-                    if line.startswith("ProductVersion"):
-                        version = line.split("\t")[1].strip()
-                        break
+        # Find the real QuickBooks version from the extracted content
+        version = find_quickbooks_version(tmp_dir)
 
         # Parse date
         try:
