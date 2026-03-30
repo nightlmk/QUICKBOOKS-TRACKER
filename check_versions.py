@@ -1,3 +1,4 @@
+import json
 import urllib.request
 from datetime import datetime
 
@@ -21,19 +22,26 @@ versions = [
 print(f"{'Product':<40} {'Last Modified':<32} {'Size (MB)'}")
 print("-" * 85)
 
+results = {}
+
 for name, url in versions:
     try:
         req = urllib.request.Request(url, method="HEAD")
         with urllib.request.urlopen(req, timeout=10) as resp:
             last_mod = resp.headers.get("Last-Modified", "N/A")
             size = int(resp.headers.get("Content-Length", 0))
-            size_mb = round(size / (1024*1024), 0)
+            size_mb = size // (1024 * 1024)
             # Parse and reformat date
             try:
                 dt = datetime.strptime(last_mod, "%a, %d %b %Y %H:%M:%S %Z")
                 last_mod = dt.strftime("%Y-%m-%d")
-            except:
+            except ValueError:
                 pass
-            print(f"{name:<40} {last_mod:<32} {size_mb:.0f} MB")
+            print(f"{name:<40} {last_mod:<32} {size_mb} MB")
+            results[name] = {"last_modified": last_mod, "size_mb": size_mb}
     except Exception as e:
         print(f"{name:<40} ERROR: {e}")
+        results[name] = {"error": str(e)}
+
+with open("versions.json", "w") as f:
+    json.dump(results, f, indent=2)
