@@ -1,54 +1,83 @@
 {
-  "QuickBooks Pro 2024": {
-    "last_modified": "2026-02-19",
-    "size_mb": 1098
-  },
-  "QuickBooks Pro 2023": {
-    "last_modified": "2026-03-09",
-    "size_mb": 1068
-  },
-  "QuickBooks Pro 2022": {
-    "last_modified": "2025-03-05",
-    "size_mb": 912
-  },
-  "QuickBooks Premier 2024": {
-    "last_modified": "2026-02-19",
-    "size_mb": 1098
-  },
-  "QuickBooks Premier 2023": {
-    "last_modified": "2026-03-09",
-    "size_mb": 1068
-  },
-  "QuickBooks Premier 2022": {
-    "last_modified": "2025-03-05",
-    "size_mb": 912
-  },
-  "QuickBooks Accountant 2024": {
-    "last_modified": "2026-02-19",
-    "size_mb": 1098
-  },
-  "QuickBooks Accountant 2023": {
-    "last_modified": "2026-03-09",
-    "size_mb": 1068
-  },
-  "QuickBooks Accountant 2022": {
-    "last_modified": "2025-03-05",
-    "size_mb": 912
-  },
-  "QuickBooks Enterprise 24": {
-    "last_modified": "2026-02-19",
-    "size_mb": 1089
-  },
-  "QuickBooks Enterprise Acct 24": {
-    "last_modified": "2026-02-19",
-    "size_mb": 1089
-  },
-  "QuickBooks Enterprise 23": {
-    "last_modified": "2026-03-09",
-    "size_mb": 1058
-  },
-  "QuickBooks Enterprise 22": {
-    "last_modified": "2025-03-05",
-    "size_mb": 902
-  }
+  "updated_at": "2026-03-30 00:00 UTC",
+  "versions": [
+    {
+      "name": "QuickBooks Pro 2024",
+      "version": "unknown",
+      "last_modified": "2026-02-19",
+      "size_mb": 1098
+    },
+    {
+      "name": "QuickBooks Pro 2023",
+      "version": "unknown",
+      "last_modified": "2026-03-09",
+      "size_mb": 1068
+    },
+    {
+      "name": "QuickBooks Pro 2022",
+      "version": "unknown",
+      "last_modified": "2025-03-05",
+      "size_mb": 912
+    },
+    {
+      "name": "QuickBooks Premier 2024",
+      "version": "unknown",
+      "last_modified": "2026-02-19",
+      "size_mb": 1098
+    },
+    {
+      "name": "QuickBooks Premier 2023",
+      "version": "unknown",
+      "last_modified": "2026-03-09",
+      "size_mb": 1068
+    },
+    {
+      "name": "QuickBooks Premier 2022",
+      "version": "unknown",
+      "last_modified": "2025-03-05",
+      "size_mb": 912
+    },
+    {
+      "name": "QuickBooks Accountant 2024",
+      "version": "unknown",
+      "last_modified": "2026-02-19",
+      "size_mb": 1098
+    },
+    {
+      "name": "QuickBooks Accountant 2023",
+      "version": "unknown",
+      "last_modified": "2026-03-09",
+      "size_mb": 1068
+    },
+    {
+      "name": "QuickBooks Accountant 2022",
+      "version": "unknown",
+      "last_modified": "2025-03-05",
+      "size_mb": 912
+    },
+    {
+      "name": "QuickBooks Enterprise 24",
+      "version": "unknown",
+      "last_modified": "2026-02-19",
+      "size_mb": 1089
+    },
+    {
+      "name": "QuickBooks Enterprise Acct 24",
+      "version": "unknown",
+      "last_modified": "2026-02-19",
+      "size_mb": 1089
+    },
+    {
+      "name": "QuickBooks Enterprise 23",
+      "version": "unknown",
+      "last_modified": "2026-03-09",
+      "size_mb": 1058
+    },
+    {
+      "name": "QuickBooks Enterprise 22",
+      "version": "unknown",
+      "last_modified": "2025-03-05",
+      "size_mb": 902
+    }
+  ]
 }
