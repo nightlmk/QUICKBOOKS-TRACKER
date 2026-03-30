@@ -1,96 +1,83 @@
 {
-  "updated_at": "2026-03-30 18:04 UTC",
+  "updated_at": "2026-03-30 19:03 UTC",
   "versions": [
     {
       "name": "QuickBooks Pro 2024",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "34.0.4019.3401",
+      "last_modified": "2026-02-19",
+      "size_mb": 1099
     },
     {
       "name": "QuickBooks Pro 2023",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "33.0.4018.3302",
+      "last_modified": "2026-03-09",
+      "size_mb": 1068
     },
     {
       "name": "QuickBooks Pro 2022",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "32.0.4019.3201",
+      "last_modified": "2025-03-05",
+      "size_mb": 913
     },
     {
       "name": "QuickBooks Premier 2024",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "34.0.4019.3401",
+      "last_modified": "2026-02-19",
+      "size_mb": 1099
     },
     {
       "name": "QuickBooks Premier 2023",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "33.0.4018.3302",
+      "last_modified": "2026-03-09",
+      "size_mb": 1068
     },
     {
       "name": "QuickBooks Premier 2022",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "32.0.4019.3201",
+      "last_modified": "2025-03-05",
+      "size_mb": 913
     },
     {
       "name": "QuickBooks Accountant 2024",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "34.0.4019.3401",
+      "last_modified": "2026-02-19",
+      "size_mb": 1099
     },
     {
       "name": "QuickBooks Accountant 2023",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "33.0.4018.3302",
+      "last_modified": "2026-03-09",
+      "size_mb": 1068
     },
     {
       "name": "QuickBooks Accountant 2022",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "32.0.4019.3201",
+      "last_modified": "2025-03-05",
+      "size_mb": 913
     },
     {
       "name": "QuickBooks Enterprise 24",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "34.0.4019.3401",
+      "last_modified": "2026-02-19",
+      "size_mb": 1089
     },
     {
       "name": "QuickBooks Enterprise Acct 24",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "34.0.4019.3401",
+      "last_modified": "2026-02-19",
+      "size_mb": 1089
     },
     {
       "name": "QuickBooks Enterprise 23",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "33.0.4018.3302",
+      "last_modified": "2026-03-09",
+      "size_mb": 1058
     },
     {
       "name": "QuickBooks Enterprise 22",
-      "version": "unknown",
-      "last_modified": "",
-      "size_mb": 0,
-      "error": "<urlopen error [Errno -5] No address associated with hostname>"
+      "version": "32.0.4019.3201",
+      "last_modified": "2025-03-05",
+      "size_mb": 903
     }
   ]
 }
