@@ -1,6 +1,10 @@
 import json
+import os
+import shutil
+import subprocess
+import tempfile
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Only 2022-2024 US Windows versions (no Mac, no POS)
 versions = [
@@ -19,29 +23,77 @@ versions = [
     ("QuickBooks Enterprise 22",         "https://DLM2.download.intuit.com/akdlm/SBD/QuickBooks/2022/Latest/QuickBooksEnterprise22.exe"),
 ]
 
-print(f"{'Product':<40} {'Last Modified':<32} {'Size (MB)'}")
-print("-" * 85)
-
-results = {}
+results = []
 
 for name, url in versions:
+    print(f"Processing {name}...")
+    tmp_fd, tmp_exe = tempfile.mkstemp(suffix=".exe")
+    os.close(tmp_fd)
+    tmp_dir = tempfile.mkdtemp()
     try:
+        # Download
+        urllib.request.urlretrieve(url, tmp_exe)
+
+        # Get Last-Modified and Content-Length from headers
         req = urllib.request.Request(url, method="HEAD")
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            last_mod = resp.headers.get("Last-Modified", "N/A")
-            size = int(resp.headers.get("Content-Length", 0))
-            size_mb = size // (1024 * 1024)
-            # Parse and reformat date
-            try:
-                dt = datetime.strptime(last_mod, "%a, %d %b %Y %H:%M:%S %Z")
-                last_mod = dt.strftime("%Y-%m-%d")
-            except ValueError:
-                pass
-            print(f"{name:<40} {last_mod:<32} {size_mb} MB")
-            results[name] = {"last_modified": last_mod, "size_mb": size_mb}
+        with urllib.request.urlopen(req) as r:
+            last_mod = r.headers.get("Last-Modified", "")
+            size_mb = round(int(r.headers.get("Content-Length", 0)) / (1024 * 1024))
+
+        # Extract exe
+        extract = subprocess.run(["7z", "x", tmp_exe, "-aoa", f"-o{tmp_dir}"], capture_output=True)
+        if extract.returncode != 0:
+            raise RuntimeError(f"7z extraction failed: {extract.stderr.decode(errors='replace')}")
+
+        # Find quickbooks.msi
+        msi_path = None
+        for root, dirs, files in os.walk(tmp_dir):
+            for f in files:
+                if f.lower() == "quickbooks.msi":
+                    msi_path = os.path.join(root, f)
+                    break
+
+        version = None
+        if msi_path:
+            msi_result = subprocess.run(
+                ["msiinfo", "export", msi_path, "Property"],
+                capture_output=True, text=True
+            )
+            if msi_result.returncode == 0:
+                for line in msi_result.stdout.splitlines():
+                    if line.startswith("ProductVersion"):
+                        version = line.split("\t")[1].strip()
+                        break
+
+        # Parse date
+        try:
+            dt = datetime.strptime(last_mod, "%a, %d %b %Y %H:%M:%S %Z")
+            date_str = dt.strftime("%Y-%m-%d")
+        except Exception:
+            date_str = last_mod
+
+        results.append({
+            "name": name,
+            "version": version or "unknown",
+            "last_modified": date_str,
+            "size_mb": size_mb,
+        })
+        print(f"  -> {version} ({date_str})")
+
     except Exception as e:
-        print(f"{name:<40} ERROR: {e}")
-        results[name] = {"error": str(e)}
+        print(f"  ERROR: {e}")
+        results.append({"name": name, "version": "unknown", "last_modified": "", "size_mb": 0, "error": str(e)})
+    finally:
+        if os.path.exists(tmp_exe):
+            os.remove(tmp_exe)
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+
+output = {
+    "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+    "versions": results,
+}
 
 with open("versions.json", "w") as f:
-    json.dump(results, f, indent=2)
+    json.dump(output, f, indent=2)
+
+print("Done. versions.json updated.")
