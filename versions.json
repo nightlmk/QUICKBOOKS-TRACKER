@@ -1,10 +1,10 @@
 {
-  "updated_at": "2026-04-23 12:55 UTC",
+  "updated_at": "2026-04-24 01:20 UTC",
   "versions": [
     {
       "name": "QuickBooks Pro 2024",
-      "version": "34.0.4019.3401",
-      "last_modified": "2026-02-19",
+      "version": "34.0.4020.3401",
+      "last_modified": "2026-04-06",
       "size_mb": 1099
     },
     {
@@ -21,8 +21,8 @@
     },
     {
       "name": "QuickBooks Premier 2024",
-      "version": "34.0.4019.3401",
-      "last_modified": "2026-02-19",
+      "version": "34.0.4020.3401",
+      "last_modified": "2026-04-06",
       "size_mb": 1099
     },
     {
@@ -39,8 +39,8 @@
     },
     {
       "name": "QuickBooks Accountant 2024",
-      "version": "34.0.4019.3401",
-      "last_modified": "2026-02-19",
+      "version": "34.0.4020.3401",
+      "last_modified": "2026-04-06",
       "size_mb": 1099
     },
     {
@@ -57,14 +57,14 @@
     },
     {
       "name": "QuickBooks Enterprise 24",
-      "version": "34.0.4019.3401",
-      "last_modified": "2026-02-19",
+      "version": "34.0.4020.3401",
+      "last_modified": "2026-04-06",
       "size_mb": 1089
     },
     {
       "name": "QuickBooks Enterprise Acct 24",
-      "version": "34.0.4019.3401",
-      "last_modified": "2026-02-19",
+      "version": "34.0.4020.3401",
+      "last_modified": "2026-04-06",
       "size_mb": 1089
     },
     {
